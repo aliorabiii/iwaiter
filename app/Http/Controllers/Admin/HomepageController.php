@@ -4,28 +4,53 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Course;
 
 class HomepageController extends Controller
 {
-    public function index()
-    {
-        // Check permission
-        if (!auth()->user()->can('homepage-view')) {
-            abort(403, 'Unauthorized action.');
-        }
+    // Show homepage management
+  public function index() {
+    $courses = \App\Models\Course::all();
+    return view('home', compact('courses'));
+}
 
-        return view('admin.homepage.index', [
-            'title' => 'Homepage Management'
+    // Store new course from homepage panel
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'instructor' => 'nullable|string|max:255',
+            'duration' => 'nullable|string|max:50',
+            'price' => 'nullable|numeric',
         ]);
+
+        Course::create($validated);
+
+        return redirect()->route('admin.homepage')->with('success', 'Course added successfully.');
     }
 
-    public function update(Request $request)
+    // Update course
+    public function update(Request $request, Course $course)
     {
-        if (!auth()->user()->can('homepage-edit')) {
-            abort(403, 'Unauthorized action.');
-        }
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'instructor' => 'nullable|string|max:255',
+            'duration' => 'nullable|string|max:50',
+            'price' => 'nullable|numeric',
+        ]);
 
-        // Update homepage content logic here
-        return redirect()->route('admin.homepage')->with('success', 'Homepage updated successfully.');
+        $course->update($validated);
+
+        return redirect()->route('admin.homepage')->with('success', 'Course updated successfully.');
+    }
+
+    // Delete course
+    public function destroy(Course $course)
+    {
+        $course->delete();
+
+        return redirect()->route('admin.homepage')->with('success', 'Course deleted successfully.');
     }
 }

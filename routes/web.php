@@ -4,6 +4,68 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Course;
+
+
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\HomepageController;
+
+use App\Http\Controllers\Admin\FeatureController;
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::resource('features', FeatureController::class)
+        ->names([
+            'index' => 'admin.features.index',
+            'create' => 'admin.features.create',
+            'store' => 'admin.features.store',
+            'edit' => 'admin.features.edit',
+            'update' => 'admin.features.update',
+            'destroy' => 'admin.features.destroy',
+        ]);
+});
+
+
+
+
+// Admin routes, all routes behind auth middleware
+Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
+
+    // Courses management
+    Route::resource('courses', CourseController::class);
+
+    // Homepage management
+    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+    Route::post('/homepage/update', [HomepageController::class, 'update'])->name('homepage.update');
+    Route::post('/homepage/store', [HomepageController::class, 'store'])->name('homepage.store');
+    Route::delete('/homepage/{course}', [HomepageController::class, 'destroy'])->name('homepage.destroy');
+
+    // You can add other admin routes here (team members, features, etc.)
+});
+
+Route::get('/admin/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
+Route::post('/admin/courses', [CourseController::class, 'store'])->name('admin.courses.store');
+
+
+
+
+// routes/web.php
+
+$placeholderPages = [
+   
+    'admin.services.index' => 'Services',
+    'admin.courses.index' => 'Courses',
+    'admin.staff.index' => 'Staff Scheduling',
+    'admin.menu.index' => 'Menu Management',
+    'admin.feedback.index' => 'Customer Feedback',
+    'admin.analytics.index' => 'Analytics Dashboard',
+    'admin.clients.index' => 'Our Valued Clients',
+];
+
+foreach ($placeholderPages as $route => $title) {
+    Route::get('/'.str_replace('.', '/', $route), function() use ($title) {
+        return view('admin.placeholder', ['title' => $title]);
+    })->name($route);
+}
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
@@ -37,9 +99,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
         return view('admin.settings.index');
     })->name('settings')->middleware('can:settings-view');
 });
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+});
+
+
+
+
+
 Route::get('/', function () {
-    return view('home');
-})->name('home');
+    $courses = Course::all(); // fetch all courses
+    return view('home', compact('courses')); // pass them to the view
+});
 
 Route::get('/about', function () {
     return view('about');
@@ -66,6 +139,14 @@ Route::get('/services', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard')->middleware(['auth', 'verified', 'can:dashboard-view']);
+
+Route::prefix('admin')
+    ->as('admin.')
+    ->middleware(['auth', 'can:team-manage'])
+    ->group(function () {
+        Route::get('/team', [TeamMemberController::class, 'index'])->name('team.index'); // show table
+        Route::put('/team/{id}', [TeamMemberController::class, 'update'])->name('team.update'); // update member
+    });
 
 
 

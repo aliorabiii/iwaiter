@@ -300,7 +300,6 @@ https://templatemo.com/tm-586-scholar
 
 <section class="py-5 bg-white text-dark">
   <div class="container">
-    
     <!-- Header -->
     <div class="row mb-5">
       <div class="col text-center">
@@ -312,61 +311,28 @@ https://templatemo.com/tm-586-scholar
 
     <!-- Courses Grid -->
     <div class="row g-4">
-      
-      <!-- Course Card 1 -->
-      <div class="col-lg-4 col-md-6 design">
+      @foreach($courses as $course)
+      <div class="col-lg-4 col-md-6">
         <a href="{{ url('/contact') }}" class="text-decoration-none">
           <div class="card h-100 shadow hover-scale">
-            <img src="assets/images/introductry.webp" class="card-img-top course-img" alt="Course">
+            <img src="{{ $course->image ?? 'assets/images/default-course.jpg' }}" class="card-img-top course-img" alt="{{ $course->title }}">
             <div class="card-body">
-              <span class="badge bg-warning text-dark mb-2 rounded-pill">Introductory</span>
-              <h5 class="card-title mt-2 fw-bold">Introductory course for restaurant owners and managers.</h5>
-              <p class="text-muted mb-2 fw-bold">Duration: 5 hours</p>
-              <p class="text-muted mb-2 fw-bold">Audience: Restaurant managers, supervisors.</p>
-              <p class="text-muted mb-2 fw-bold">by Ali Orabi</p>
-              <p class="fw-bold text-dark">$300</p>
+              <span class="badge bg-warning text-dark mb-2 rounded-pill">{{ $course->category ?? 'General' }}</span>
+              <h5 class="card-title mt-2 fw-bold">{{ $course->title }}</h5>
+              <p class="text-muted mb-2 fw-bold">{{ $course->subtitle }}</p>
+              <p class="text-muted mb-2 fw-bold">Duration: {{ $course->duration }}</p>
+              <p class="text-muted mb-2 fw-bold">Audience: {{ $course->audience }}</p>
+              <p class="text-muted mb-2 fw-bold">by {{ $course->instructor }}</p>
+              <p class="fw-bold text-dark">${{ $course->price }}</p>
             </div>
           </div>
         </a>
       </div>
-
-      <!-- Course Card 2 -->
-      <div class="col-lg-4 col-md-6 development">
-        <a href="{{ url('/contact') }}" class="text-decoration-none">
-          <div class="card h-100 shadow hover-scale">
-            <img src="assets/images/management.jpg" class="card-img-top course-img" alt="Course">
-            <div class="card-body">
-              <span class="badge bg-warning text-dark mb-2 rounded-pill">Management</span>
-              <h5 class="card-title mt-2 fw-bold">Kitchen & Order Management</h5>
-              <p class="text-muted mb-2 fw-bold">Duration: 7 hours</p>
-              <p class="text-muted mb-2 fw-bold">Audience: Kitchen staff.</p>
-              <p class="text-muted mb-2 fw-bold">by Hassan Younis</p>
-              <p class="fw-bold text-dark">$300</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- Course Card 3 -->
-      <div class="col-lg-4 col-md-6 wordpress">
-        <a href="{{ url('/contact') }}" class="text-decoration-none">
-          <div class="card h-100 shadow hover-scale">
-            <img src="assets/images/optimaize.webp" class="card-img-top course-img" alt="Course">
-            <div class="card-body">
-              <span class="badge bg-warning text-dark mb-2 rounded-pill">Optimization</span>
-              <h5 class="card-title mt-2 fw-bold">Analytics & Business Optimization</h5>
-              <p class="text-muted mb-2 fw-bold">Duration: 7 hours</p>
-              <p class="text-muted mb-2 fw-bold">Audience: Restaurant owners & managers.</p>
-              <p class="text-muted mb-2 fw-bold">by Majd Rabie</p>
-              <p class="fw-bold text-dark">$300</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
+      @endforeach
     </div>
   </div>
 </section>
+
 
 <!-- CSS -->
 <style>
@@ -564,59 +530,27 @@ https://templatemo.com/tm-586-scholar
     </div>
 
     <div class="row g-4 justify-content-center">
-      <!-- Member 1 -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card shadow hover-scale text-center border-0 team-card">
-          <div class="team-img-wrapper">
-            <img src="assets/images/ali.png" class="card-img-top team-img" alt="Ali Orabi">
-          </div>
-          <div class="card-body">
-            <span class="text-warning fw-bold">Full Stack Developer</span>
-            <h5 class="mt-2">Ali Orabi</h5>
-            <ul class="list-inline mt-2">
-              <li class="list-inline-item"><a href="#" class="text-warning fs-5"><i class="fab fa-facebook"></i></a></li>
-              <li class="list-inline-item"><a href="#" class="text-warning fs-5"><i class="fab fa-linkedin"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Member 2 -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card shadow hover-scale text-center border-0 team-card">
-          <div class="team-img-wrapper">
-            <img src="assets/images/mjd.png" class="card-img-top team-img " alt="Majd Rabie">
-          </div>
-          <div class="card-body">
-            <span class="text-warning fw-bold">IT Specialist</span>
-            <h5 class="mt-2">Majd Rabie</h5>
-            <ul class="list-inline mt-2">
-              <li class="list-inline-item"><a href="https://www.facebook.com/share/1SosscGsbA/?mibextid=wwXIfr" class="text-warning fs-5"><i class="fab fa-facebook"></i></a></li>
-              <li class="list-inline-item"><a href="https://www.linkedin.com/in/MajdRabie" class="text-warning fs-5"><i class="fab fa-linkedin"></i></a></li>
-            </ul>
+      @foreach(\App\Models\TeamMember::all() as $member)
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow hover-scale text-center border-0 team-card">
+            <div class="team-img-wrapper">
+<img src="{{ asset($member->image) }}" class="card-img-top team-img" alt="{{ $member->name }}">
+            </div>
+            <div class="card-body">
+              <span class="text-warning fw-bold">{{ $member->job_title }}</span>
+              <h5 class="mt-2">{{ $member->name }}</h5>
+              <ul class="list-inline mt-2">
+                <li class="list-inline-item"><a href="{{ $member->facebook_url }}" class="text-warning fs-5"><i class="fab fa-facebook"></i></a></li>
+                <li class="list-inline-item"><a href="{{ $member->linkedin_url }}" class="text-warning fs-5"><i class="fab fa-linkedin"></i></a></li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Member 3 -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card shadow hover-scale text-center border-0 team-card">
-          <div class="team-img-wrapper">
-            <img src="assets/images/hassan.png" class="card-img-top team-img" alt="Hassan Younis">
-          </div>
-          <div class="card-body">
-            <span class="text-warning fw-bold">Web Developer</span>
-            <h5 class="mt-2">Hassan Younis</h5>
-            <ul class="list-inline mt-2">
-              <li class="list-inline-item"><a href="#" class="text-warning fs-5"><i class="fab fa-facebook"></i></a></li>
-              <li class="list-inline-item"><a href="https://www.linkedin.com/in/hasan-younes-69b2b82b1?" class="text-warning fs-5"><i class="fab fa-linkedin"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      @endforeach
     </div>
   </div>
 </section>
+
 
 <!-- Custom CSS -->
 <style>
