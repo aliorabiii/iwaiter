@@ -37,7 +37,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
         return view('admin.settings.index');
     })->name('settings')->middleware('can:settings-view');
 });
-Route::get('/', function () {
+Route::get('/home', function () {
     return view('home');
 })->name('home');
 
