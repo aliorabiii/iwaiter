@@ -104,18 +104,7 @@ https://templatemo.com/tm-586-scholar
   </div>
 </section>
 
-<!-- Extra Styling -->
-<style>
-.hero-banner h1 span {
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
-}
-.hero-banner p {
-  text-shadow: 1px 1px 8px rgba(0,0,0,0.5);
-}
-.object-fit-cover {
-  object-fit: cover;
-}
-</style>
+
 
 <!-- Animate.css for smooth entrance effects -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -179,117 +168,7 @@ https://templatemo.com/tm-586-scholar
   </div>
 </section>
 
-<!-- CSS -->
-<style>
 
-/* Make all step images same size */
-.step-ipad {
-  width: 100%;
-  max-width: 200px;  /* keep consistent size */
-  height: 150px;     /* fixed height */
-  object-fit: cover; /* crop nicely */
-  display: block;
-  margin: 0 auto;
-}
-
-/* Make sure all cards align equally */
-.timeline-step {
-  flex: 1;
-  margin: 0 10px;
-}
-
-.timeline-step .step-card {
-  min-height: 380px; /* adjust so all cards same height */
-}
-
-
-.how-it-works {
-  background: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%);
-  position: relative;
-}
-
-.timeline {
-  position: relative;
-  gap: 2rem;
-}
-
-.timeline-line {
-  height: 4px;
-  background-color: #ddd;
-  top: 50%;
-  left: 0;
-  z-index: 1;
-}
-
-.timeline-step {
-  width: 30%;
-  position: relative;
-  z-index: 2;
-}
-
-.step-circle {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  margin: 0 auto;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
-}
-
-.timeline-step:hover .step-circle {
-  transform: scale(1.2);
-}
-
-.step-card {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  padding: 1.5rem;
-  transition: transform 0.4s, box-shadow 0.4s;
-  overflow: hidden;
-}
-
-.step-card:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-}
-
-.step-ipad {
-  width: 100%;
-  max-width: 180px;
-  margin-top: 1rem;
-  border-radius: 15px;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.step-card:hover .step-ipad {
-  transform: scale(1.05);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-}
-
-/* Responsive */
-@media (max-width: 991px) {
-  .timeline {
-    flex-direction: column;
-    align-items: center;
-  }
-  .timeline-step {
-    width: 80%;
-    margin-bottom: 3rem;
-  }
-  .timeline-line {
-    top: 0;
-    left: 50%;
-    width: 4px;
-    height: 100%;
-    transform: translateX(-50%);
-  }
-}
-</style>
 
 <!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -334,18 +213,6 @@ https://templatemo.com/tm-586-scholar
 </section>
 
 
-<!-- CSS -->
-<style>
-.course-img {
-  height: 220px;       /* fixed height for all images */
-  object-fit: cover;   /* crop images nicely */
-}
-.hover-scale:hover {
-  transform: scale(1.03);
-  transition: 0.3s ease-in-out;
-}
-</style>
-
 
 <!-- agency section -->
 <section class="py-5">
@@ -389,29 +256,6 @@ https://templatemo.com/tm-586-scholar
   </div>
 </section>
 
-<!-- Custom CSS -->
-<style>
-  /* Remove card background & border */
-  .logo-card {
-    background: transparent !important;
-    border: none !important;
-    padding: 20px;
-    transition: transform 0.3s ease, filter 0.3s ease;
-  }
-
-  /* Logo image hover effect */
-  .logo-img {
-    transition: transform 0.3s ease, filter 0.3s ease;
-    max-height: 200px; /* keep them uniform */
-    object-fit: contain;
-  }
-
-  /* Hover effect (scale + glow) */
-  .logo-card:hover .logo-img {
-    transform: scale(1.1);
-    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.15));
-  }
-</style>
 
 
 <!-- Custom CSS -->
@@ -456,24 +300,7 @@ https://templatemo.com/tm-586-scholar
   </div>
 </section>
 
-<!-- Custom CSS -->
-<style>
-  /* Card hover effect */
-  .hover-scale {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 0.5rem;
-  }
-  .hover-scale:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-  }
 
-  /* Counter style */
-  .counter {
-    font-size: 2.5rem;
-    font-weight: 700;
-  }
-</style>
 
 <!-- Counter JS: start when scrolled into view -->
 <script>
@@ -552,67 +379,6 @@ https://templatemo.com/tm-586-scholar
 </section>
 
 
-<!-- Custom CSS -->
-<style>
-  /* Keep all cards same size */
-  .team-card {
-    max-height: 360px;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    background-color: #fff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  /* Image wrapper to contain faces */
-  .team-img-wrapper {
-    height: 180px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  .team-img {
-    max-height: 100%;
-    width: auto;
-    object-fit: contain; /* Keep face visible */
-  }
-
-  /* Card hover animation */
-  .hover-scale:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-  }
-
-  /* Text styling */
-  .card-body h5 {
-    font-weight: 600;
-    color: #212529;
-    font-size: 1.1rem;
-  }
-  .card-body span {
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-  }
-
-  /* Social icons hover */
-  .list-inline-item a:hover {
-    color: #ffc107;
-    transform: translateY(-2px);
-    transition: 0.2s;
-  }
-
-  /* Scroll fade-in animation */
-  .team-card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease-out;
-  }
-  .team-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
 
 <!-- Scroll Animation JS -->
 <script>
@@ -692,35 +458,7 @@ https://templatemo.com/tm-586-scholar
   </div>
 </section>
 
-<!-- Styles -->
-<style>
-  .schedule-card {
-    border-radius: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: #fff;
-  }
-  .schedule-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  }
-  .icon i {
-    transition: transform 0.3s ease;
-  }
-  .schedule-card:hover .icon i {
-    transform: scale(1.1);
-  }
 
-  /* Animation on scroll */
-
-  
-  .animate-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 0.7s ease-out;
-  }
-  .delay-1 { transition-delay: 0.2s; }
-  .delay-2 { transition-delay: 0.4s; }
-</style>
 
 <!-- Scroll Animation Script -->
 <script>
