@@ -101,9 +101,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 });
 
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-});
+// Route::prefix('admin')->name('admin.')->group(function () {
+//     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+// });
 
 
 
@@ -113,6 +113,9 @@ Route::get('/', function () {
     $courses = Course::all(); // fetch all courses
     return view('home', compact('courses')); // pass them to the view
 });
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
 
 Route::get('/about', function () {
     return view('about');
