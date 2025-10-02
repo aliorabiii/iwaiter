@@ -1,4 +1,8 @@
 <?php
+
+namespace Database\Seeders; // <- IMPORTANT
+
+use Illuminate\Database\Seeder; // <- required!
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -6,12 +10,19 @@ class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
+        // Existing permissions
         $permissions = [
             'homepage-view',
             'homepage-edit',
             'course-create',
             'course-edit',
             'course-delete',
+
+            // NEW: Team permissions
+            'team-view',
+            'team-create',
+            'team-edit',
+            'team-delete',
         ];
 
         foreach ($permissions as $permission) {

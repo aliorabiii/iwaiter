@@ -1,33 +1,27 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mt-5">
-    <h2>Add New Feature</h2>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('admin.features.store') }}" method="POST">
+<div class="container">
+    <h2>Create Feature</h2>
+    <form action="{{ url('/admin/features') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" name="title" class="form-control" id="title" value="{{ old('title') }}" required>
+            <input type="text" name="title" class="form-control" required>
         </div>
-
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea name="description" id="description" rows="4" class="form-control">{{ old('description') }}</textarea>
+            <textarea name="description" class="form-control" required></textarea>
         </div>
-
-        <button type="submit" class="btn btn-success">Save Feature</button>
-        <a href="{{ route('admin.features.index') }}" class="btn btn-secondary">Back</a>
+        <div class="mb-3">
+            <label for="icon" class="form-label">Icon (optional)</label>
+            <input type="text" name="icon" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image (optional)</label>
+            <input type="file" name="image" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Create Feature</button>
     </form>
 </div>
 @endsection

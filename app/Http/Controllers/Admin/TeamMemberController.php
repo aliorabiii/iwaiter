@@ -1,90 +1,68 @@
 <?php
-
-
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-
-
-
 
 class TeamMemberController extends Controller
 {
-   public function index()
+    public function index()
     {
-        // Fetch all team members from DB
-        $teamMembers = TeamMember::all();
-
-        // Pass to the view
-        return view('admin.team.index', compact('teamMembers'));
+        $members = TeamMember::all();
+        return view('admin.team.index', compact('members'));
     }
+
     public function create()
     {
         return view('admin.team.create');
     }
 
     public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:team_members,email', // adjust table name
+        // add other fields validation
+    ]);
+
+    $team = new TeamMember(); // or whatever your model is
+    $team->name = $request->name;
+    $team->email = $request->email;
+    // other fields
+    $team->save();
+
+return redirect()->route('admin.team.index')->with('success', 'Team member added successfully.');
+}
+
+    public function edit(TeamMember $team_member)
     {
-        $request->validate([
+        return view('admin.team.edit', compact('team_member'));
+    }
+
+    public function update(Request $request, TeamMember $team_member)
+    {
+        $data = $request->validate([
             'name' => 'required|string|max:255',
-            'role' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'facebook' => 'nullable|url',
-            'linkedin' => 'nullable|url',
+            'job_title' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+            'facebook_url' => 'nullable|url',
+            'linkedin_url' => 'nullable|url',
         ]);
 
-        // Upload image
-        if($request->hasFile('image')){
-            $imageName = time().'_'.$request->image->getClientOriginalName();
+        if ($request->hasFile('image')) {
+            $imageName = $request->image->getClientOriginalName();
             $request->image->move(public_path('assets/images'), $imageName);
+            $data['image'] = 'assets/images/' . $imageName;
         }
 
-        TeamMember::create([
-            'name' => $request->name,
-            'role' => $request->role,
-            'image' => $imageName ?? null,
-            'facebook' => $request->facebook,
-            'linkedin' => $request->linkedin,
-        ]);
-
-        return redirect()->route('admin.team.index')->with('success', 'Team member added successfully.');
+        $team_member->update($data);
+        return redirect()->route('admin.team.index')->with('success', 'Team member updated.');
     }
 
-    public function edit(TeamMember $team)
+    public function destroy(TeamMember $team_member)
     {
-        return view('admin.team.edit', compact('team'));
+        $team_member->delete();
+        return redirect()->route('admin.team.index')->with('success', 'Team member deleted.');
     }
-
-public function update(Request $request, $id)
-    {
-        $member = TeamMember::findOrFail($id);
-
-        // Validate input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'role' => 'nullable|string|max:255',
-        ]);
-
-        // Update the member
-        $member->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-        ]);
-
-        return redirect()->route('admin.team.index')->with('success', 'Team member updated successfully!');
-    }
-
-
-public function destroy($id)
-{
-    $member = TeamMember::findOrFail($id);
-    $member->delete();
-
-    return redirect()->route('admin.team.index')->with('success', 'Member deleted successfully.');
-}
 }

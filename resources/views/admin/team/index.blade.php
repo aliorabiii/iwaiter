@@ -1,99 +1,81 @@
-<!-- resources/views/admin/team/index.blade.php -->
-
 @extends('layouts.admin')
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="mb-4">Team Members</h2>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Team Members</h1>
+        @can('team-create')
+        <a href="{{ route('admin.team.create') }}" class="btn btn-success d-flex align-items-center">
+            <i class="bi bi-plus-lg me-1"></i> Add Member
+        </a>
+        @endcan
+    </div>
 
+    <!-- Success Message -->
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     @endif
 
-    <table class="table table-hover table-bordered align-middle">
-        <thead class="table-dark text-center">
-            <tr>
-                <th>Photo</th>
-                <th>Name</th>
-                <th>Facebook</th>
-                <th>LinkedIn</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            @foreach($teamMembers as $member)
-            <tr>
-                <td>
-                    <img src="{{ $member->photo ?? 'https://via.placeholder.com/50' }}" alt="{{ $member->name }}" class="rounded-circle" width="50">
-                </td>
-                <td>{{ $member->name }}</td>
-                <td>
-                    @if($member->facebook)
-                        <a href="{{ $member->facebook }}" target="_blank" class="btn btn-sm btn-primary">FB</a>
-                    @else
-                        N/A
-                    @endif
-                </td>
-                <td>
-                    @if($member->linkedin)
-                        <a href="{{ $member->linkedin }}" target="_blank" class="btn btn-sm btn-info">LI</a>
-                    @else
-                        N/A
-                    @endif
-                </td>
-                <td>
-                    <!-- Edit Button triggers modal -->
-                    <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $member->id }}">Edit</button>
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Job Title</th>
+                    <th>Image</th>
+                    <th width="220">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($members as $member)
+                    <tr class="text-center">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $member->name }}</td>
+                        <td>{{ $member->job_title }}</td>
+                        <td>
+                            @if($member->image)
+                                <img src="{{ asset($member->image) }}" alt="{{ $member->name }}" class="rounded" width="80">
+                            @else
+                                <span class="text-muted">No Image</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                @can('team-edit')
+                                <a href="{{ route('admin.team.edit', $member->id) }}" 
+                                   class="btn btn-sm btn-warning d-flex align-items-center">
+                                    <i class="bi bi-pencil me-1"></i> Edit
+                                </a>
+                                @endcan
 
-                    <!-- Delete Form -->
-                    <form action="{{ route('admin.team.destroy', $member->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                    </form>
-                </td>
-            </tr>
-
-            <!-- Edit Modal -->
-            <div class="modal fade" id="editModal{{ $member->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $member->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('admin.team.update', $member->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editModalLabel{{ $member->id }}">Edit {{ $member->name }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                @can('team-delete')
+                                <form action="{{ route('admin.team.destroy', $member->id) }}" method="POST"
+                                      onsubmit="return confirm('Are you sure you want to delete this member?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center">
+                                        <i class="bi bi-trash me-1"></i> Delete
+                                    </button>
+                                </form>
+                                @endcan
                             </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label>Name</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $member->name }}" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Facebook</label>
-                                    <input type="url" name="facebook" class="form-control" value="{{ $member->facebook }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label>LinkedIn</label>
-                                    <input type="url" name="linkedin" class="form-control" value="{{ $member->linkedin }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Photo URL</label>
-                                    <input type="url" name="photo" class="form-control" value="{{ $member->photo }}">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">Update</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            @endforeach
-        </tbody>
-    </table>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No team members found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 @endsection

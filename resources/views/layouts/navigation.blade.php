@@ -40,6 +40,11 @@
                     @endcan
 
       
+                    @can('features-view')
+                    <x-nav-link :href="route('admin.features.index')" :active="request()->is('admin/features*')">
+                        <i class="fas fa-graduation-cap mr-1 text-sm"></i>{{ __('Features') }}
+                    </x-nav-link>
+                    @endcan
 
 
                     @can('expected-edit')

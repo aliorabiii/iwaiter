@@ -9,15 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up(): void
+ // database/migrations/xxxx_xx_xx_create_features_table.php
+public function up(): void
 {
     Schema::create('features', function (Blueprint $table) {
         $table->id();
         $table->string('title');
-        $table->text('description')->nullable();
+        $table->string('icon')->nullable();   // bootstrap icon class or emoji
+        $table->string('image')->nullable();  // feature image path
+        $table->text('description');
         $table->timestamps();
     });
 }
+
     /**
      * Reverse the migrations.
      */

@@ -1,33 +1,70 @@
 <?php
 
+
+use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Course;
 
-
+use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\HomepageController;
 
-use App\Http\Controllers\Admin\FeatureController;
+use Spatie\Permission\Middlewares\PermissionMiddleware;
+use Spatie\Permission\Middlewares\Permission;
+use App\Http\Controllers\Admin\ServiceController;
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
-    Route::resource('features', FeatureController::class)
-        ->names([
-            'index' => 'admin.features.index',
-            'create' => 'admin.features.create',
-            'store' => 'admin.features.store',
-            'edit' => 'admin.features.edit',
-            'update' => 'admin.features.update',
-            'destroy' => 'admin.features.destroy',
-        ]);
+
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
+
+// Public services page
+Route::get('/services', function () {
+    $services = \App\Models\Service::where('is_active', true)->orderBy('order')->get();
+    return view('services', compact('services'));
+})->name('services');
+
+// Admin services management
+Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
+    Route::resource('services', ServiceController::class);
 });
 
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('team-members', TeamMemberController::class, [
+        'names' => [
+            'index' => 'team.index',
+            'create' => 'team.create',
+            'store' => 'team.store',
+            'edit' => 'team.edit',
+            'update' => 'team.update',
+            'destroy' => 'team.destroy',
+        ]
+    ]);
+});
 
+ 
 
-// Admin routes, all routes behind auth middleware
+// ✅ PUBLIC FEATURES PAGE (accessible to everyone - must come FIRST)
+Route::get('/features', function () {
+    $features = \App\Models\Feature::all();
+    return view('features', compact('features'));
+})->name('features');
+
+// ✅ ADMIN FEATURES MANAGEMENT (requires authentication)
+Route::prefix('admin')
+    ->middleware(['auth'])
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/features', [FeatureController::class, 'index'])->name('features.index');
+        Route::get('/features/create', [FeatureController::class, 'create'])->name('features.create');
+        Route::post('/features', [FeatureController::class, 'store'])->name('features.store');
+        Route::get('/features/{feature}/edit', [FeatureController::class, 'edit'])->name('features.edit');
+        Route::put('/features/{feature}', [FeatureController::class, 'update'])->name('features.update');
+        Route::delete('/features/{feature}', [FeatureController::class, 'destroy'])->name('features.destroy');
+    });
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
 
     // Courses management
@@ -52,7 +89,7 @@ Route::post('/admin/courses', [CourseController::class, 'store'])->name('admin.c
 
 $placeholderPages = [
    
-    'admin.services.index' => 'Services',
+    
     'admin.courses.index' => 'Courses',
     'admin.staff.index' => 'Staff Scheduling',
     'admin.menu.index' => 'Menu Management',
@@ -86,13 +123,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
         return view('admin.contact.index');
     })->name('contact')->middleware('can:contact-page-view');
 
-    Route::get('/features', function () {
-        return view('admin.features.index');
-    })->name('features')->middleware('can:features-view');
-
-    Route::get('/services', function () {
+ 
+    /* Route::get('/services', function () {
         return view('admin.services.index');
-    })->name('services')->middleware('can:services-view');
+    })->name('services')->middleware('can:services-view'); */
 
     // Settings (if you want it)
     Route::get('/settings', function () {
@@ -125,16 +159,15 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/features', function () {
-    return view('features');
-})->name('features');
+
 
 Route::get('/testimonials', function () {
     return view('testimonials');
 })->name('testimonials');
 
 Route::get('/services', function () {
-    return view('services');
+    $services = \App\Models\Service::where('is_active', true)->orderBy('order')->get();
+    return view('services', compact('services'));
 })->name('services');
 
 
@@ -143,13 +176,11 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard')->middleware(['auth', 'verified', 'can:dashboard-view']);
 
-Route::prefix('admin')
-    ->as('admin.')
-    ->middleware(['auth', 'can:team-manage'])
-    ->group(function () {
-        Route::get('/team', [TeamMemberController::class, 'index'])->name('team.index'); // show table
-        Route::put('/team/{id}', [TeamMemberController::class, 'update'])->name('team.update'); // update member
-    });
+
+
+
+
+
 
 
 
@@ -166,6 +197,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:Super Admin')->group(function () {
         Route::resource('roles', RoleController::class);
     });
+
 
     // User management routes (for Super Admin and Admin)
     Route::middleware('role:Super Admin|Admin')->group(function () {
