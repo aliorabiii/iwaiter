@@ -193,8 +193,11 @@ https://templatemo.com/tm-586-scholar
       @foreach($courses as $course)
       <div class="col-lg-4 col-md-6">
         <a href="{{ url('/contact') }}" class="text-decoration-none">
-          <div class="card h-100 shadow hover-scale">
-            <img src="{{ $course->image ?? 'assets/images/default-course.jpg' }}" class="card-img-top course-img" alt="{{ $course->title }}">
+          <div class="card h-100 shadow hover-scale">         
+           <img src="{{ $course->image ? asset('storage/' . $course->image) : asset('assets/images/default-course.jpg') }}  " 
+     class="card-img-top course-img" 
+     alt="{{ $course->title }}">
+
             <div class="card-body">
               <span class="badge bg-warning text-dark mb-2 rounded-pill">{{ $course->category ?? 'General' }}</span>
               <h5 class="card-title mt-2 fw-bold">{{ $course->title }}</h5>

@@ -38,10 +38,11 @@ class CourseController extends Controller
 
         $course = new Course($request->except('image'));
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('courses', 'public');
-            $course->image = 'storage/' . $path;
-        }
+          if ($request->hasFile('image')) {
+    $imagePath = $request->file('image')->store('courses', 'public');
+    $course->image = $imagePath;
+    $course->save();
+}
 
         $course->save();
 
@@ -55,33 +56,44 @@ class CourseController extends Controller
     }
 
     // Update course
-    public function update(Request $request, Course $course)
-    {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'duration' => 'nullable|string|max:50',
-            'audience' => 'nullable|string|max:255',
-            'instructor' => 'nullable|string|max:255',
-            'price' => 'nullable|numeric',
-            'image' => 'nullable|image|max:2048',
-        ]);
+   public function update(Request $request, Course $course)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'subtitle' => 'nullable|string|max:255',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+        'duration' => 'required|string',
+        'audience' => 'nullable|string',
+        'price' => 'required|numeric',
+        'instructor' => 'nullable|string',
+    ]);
 
-        // Handle new image
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($course->image && Storage::disk('public')->exists(str_replace('storage/', '', $course->image))) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $course->image));
-            }
-            $path = $request->file('image')->store('courses', 'public');
-            $data['image'] = 'storage/' . $path;
+    $course->title = $request->title;
+    $course->subtitle = $request->subtitle;
+    $course->duration = $request->duration;
+    $course->audience = $request->audience;
+    $course->price = $request->price;
+    $course->instructor = $request->instructor;
+    $course->category = $request->category;
+
+
+    // Image upload / replacement
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
+        if ($course->image && file_exists(storage_path('app/public/' . $course->image))) {
+            unlink(storage_path('app/public/' . $course->image));
         }
 
-        $course->update($data);
-
-        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully!');
+        // Store new image
+        $imagePath = $request->file('image')->store('courses', 'public');
+        $course->image = $imagePath;
     }
+
+    $course->save();
+
+    return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully!');
+}
+
 
     // Delete course
     public function destroy(Course $course)

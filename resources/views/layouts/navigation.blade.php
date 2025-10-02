@@ -39,8 +39,6 @@
                     </x-nav-link>
                     @endcan
 
-      
-
 
                     @can('expected-edit')
                     <x-nav-link :href="route('admin.staff.index')" :active="request()->is('admin/staff*')">
@@ -53,6 +51,25 @@
                         <i class="fas fa-handshake mr-1 text-sm"></i>{{ __('Clients') }}
                     </x-nav-link>
                     @endcan
+
+
+
+
+                      @can('footer-manage') 
+                    <x-nav-link :href="route('admin.footer.edit')" :active="request()->is('admin/footer_settings*')">
+                        <i class="fas fa-handshake mr-1 text-sm"></i>{{ __('footer') }}
+                    </x-nav-link>
+                    @endcan 
+                 {{--   @if(auth()->user()->can('footer-manage') || auth()->user()->hasRole('super-admin'))
+    <x-nav-link :href="route('admin.footer.edit')" :active="request()->is('admin/footer-settings*')">
+        <i class="fas fa-shapes mr-1 text-sm"></i> {{ __('Footer Settings') }}
+    </x-nav-link>
+@endif --}}
+
+
+
+
+                    
                 </div>
             </div>
 
@@ -115,6 +132,13 @@
             @can('courses-view')
             <x-responsive-nav-link :href="route('admin.courses.index')">{{ __('Courses') }}</x-responsive-nav-link>
             @endcan
+            @can('footer-manage')
+            <x-responsive-nav-link :href="route('admin.footer.edit')">{{ __('footer ') }}</x-responsive-nav-link>
+            @endcan
+           
+           
+
+
             
             @can('expected-edit')
             <x-responsive-nav-link :href="route('admin.staff.index')">{{ __('Staff Scheduling') }}</x-responsive-nav-link>

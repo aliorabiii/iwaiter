@@ -8,10 +8,7 @@ use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+
 
     public function index()
     {
@@ -46,7 +43,7 @@ class PermissionController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
+        return redirect()->route('permission.index')->with('success', 'Permission created successfully.');
     }
 
     public function update(Request $request, Permission $permission)

@@ -21,6 +21,7 @@
                     <th>Image</th>
                     <th>Title</th>
                     <th>Subtitle</th>
+                    <th>Category</th>
                     <th>Duration</th>
                     <th>Audience</th>
                     <th>Price</th>
@@ -34,14 +35,19 @@
                         <td>{{ $course->id }}</td>
                         <td>
                             @if($course->image)
-                                <img src="{{ asset($course->image) }}" alt="{{ $course->title }}" 
-                                     class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover;">
-                            @else
-                                <span class="text-muted">No Image</span>
-                            @endif
+    <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}"
+         class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover;">
+@else
+    <span class="text-muted">No Image</span>
+@endif
+
                         </td>
                         <td class="fw-bold">{{ $course->title }}</td>
                         <td>{{ $course->subtitle }}</td>
+                        <td>{{ $course->category ?? '—' }}</td>   <!-- 🔹 add this -->
+                        
+                       
+
                         <td><span class="badge bg-info text-dark">{{ $course->duration }}</span></td>
                         <td><span class="badge bg-secondary">{{ $course->audience }}</span></td>
                         <td><span class="badge bg-success">${{ $course->price }}</span></td>

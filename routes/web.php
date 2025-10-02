@@ -11,6 +11,20 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\HomepageController;
 
 use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\FooterController;
+
+
+
+
+Route::prefix('admin')
+    ->middleware(['auth', 'can:footer-manage']) // only users with permission can access
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/footer-settings', [FooterController::class, 'edit'])->name('footer.edit');
+        Route::post('/footer-settings', [FooterController::class, 'update'])->name('footer.update');
+        Route::get('/footer', [FooterController::class, 'index'])->name('footer.index');
+    });
+
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('features', FeatureController::class)

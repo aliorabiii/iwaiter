@@ -18,7 +18,7 @@
           <div class="collapse navbar-collapse justify-content-end" id="navMenu">
             <ul class="navbar-nav mb-2 mb-lg-0">
              <li class="nav-item">
-    <a class="nav-link {{ Request::is('index') ? 'active' : '' }}" href="{{ url('index') }}">Home</a>
+    <a class="nav-link {{ Request::is('index') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
 </li>
 <li class="nav-item">
     <a class="nav-link {{ Request::is('about') ? 'active' : '' }}" href="{{ url('/about') }}">About Us</a>
