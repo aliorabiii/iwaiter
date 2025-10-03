@@ -66,51 +66,60 @@ https://templatemo.com/tm-586-scholar
 
     <!-- Services Cards -->
     <div class="row g-4">
-      <!-- Service 1 -->
+      @forelse($services as $service)
       <div class="col-lg-4 col-md-6">
         <div class="service-card bg-white shadow-lg rounded-4 p-5 text-center">
           <div class="icon mb-4 text-warning" style="font-size: 50px;">
-            <i class="fas fa-tablet-alt"></i>
+            @if($service->icon)
+              <i class="{{ $service->icon }}"></i>
+            @endif
           </div>
-          <h4 class="text-warning fw-bold mb-3">Digital Ordering</h4>
+          <h4 class="text-warning fw-bold mb-3">{{ $service->title }}</h4>
           <p class="text-dark mb-4">
-            Let customers place orders from their tables using iPads.
-            
+            {{ $service->short_description }}
           </p>
-          <a href="#" class="btn btn-warning btn-sm fw-bold text-dark px-4 py-2" data-bs-toggle="modal" data-bs-target="#modal1">Read More</a>
+          @if($service->full_description)
+            <a href="#" class="btn btn-warning btn-sm fw-bold text-dark px-4 py-2" 
+               data-bs-toggle="modal" data-bs-target="#modal{{ $service->id }}">Read More</a>
+          @endif
         </div>
       </div>
-
-      <!-- Service 2 -->
-      <div class="col-lg-4 col-md-6">
-        <div class="service-card bg-white shadow-lg rounded-4 p-5 text-center">
-          <div class="icon mb-4 text-warning" style="font-size: 50px;">
-            <i class="fas fa-receipt"></i>
-          </div>
-          <h4 class="text-warning fw-bold mb-3">Smart Billing</h4>
-          <p class="text-dark mb-4">
-            Automatically calculate bills and process payments directly.
-          </p>
-          <a href="#" class="btn btn-warning btn-sm fw-bold text-dark px-4 py-2" data-bs-toggle="modal" data-bs-target="#modal2">Read More</a>
-        </div>
+      @empty
+      <!-- Fallback if no services in database -->
+      <div class="col-12 text-center">
+        <p class="text-muted">No services available at the moment.</p>
       </div>
+      @endforelse
+    </div>
+  </div>
+</section>
 
-      <!-- Service 3 -->
-      <div class="col-lg-4 col-md-6">
-        <div class="service-card bg-white shadow-lg rounded-4 p-5 text-center">
-          <div class="icon mb-4 text-warning" style="font-size: 50px;">
-            <i class="fas fa-utensils"></i>
-          </div>
-          <h4 class="text-warning fw-bold mb-3">Kitchen Integration</h4>
-          <p class="text-dark mb-4">
-            Orders go directly to the kitchen in real-time.
-          </p>
-          <a href="#" class="btn btn-warning btn-sm fw-bold text-dark px-4 py-2" data-bs-toggle="modal" data-bs-target="#modal3">Read More</a>
+<!-- Modals for Full Descriptions -->
+@foreach($services as $service)
+  @if($service->full_description)
+  <div class="modal fade" id="modal{{ $service->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title fw-bold">{{ $service->title }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          @if($service->image)
+            <img src="{{ asset('assets/images/' . $service->image) }}" 
+                 alt="{{ $service->title }}" 
+                 class="img-fluid rounded mb-3">
+          @endif
+          <p>{{ $service->full_description }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
-</section>
+  @endif
+@endforeach
 
 <!-- Modals -->
 <!-- Modal 1: Digital Ordering -->
